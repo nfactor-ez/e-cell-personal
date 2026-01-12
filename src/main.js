@@ -21,7 +21,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(CONFIG.bg);
 scene.fog = new THREE.Fog(CONFIG.bg, 10, 50);
 
-const sizes = { width: window.innerWidth, height: window.innerHeight };
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
+};
+
+/* 🔑 Deployment-safe logo scroll window */
+const LOGO_SCROLL_RANGE = window.innerHeight * 1.2;
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -31,6 +37,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 2, 10);
 
+/* ---------------- RENDERER ---------------- */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 const DPR = Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.25 : 2);
 renderer.setPixelRatio(DPR);
@@ -56,6 +63,7 @@ composer.addPass(bloomPass);
 const texLoader = new THREE.TextureLoader();
 const logoTexture = texLoader.load('/logo.png');
 
+/* ---------------- GEOMETRY ---------------- */
 const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
 const edgeGeo = new THREE.EdgesGeometry(cubeGeo);
 
@@ -80,7 +88,6 @@ const offset = (CONFIG.cubeCount * CONFIG.cubeStep) / 2 - CONFIG.cubeStep / 2;
 for (let x = 0; x < CONFIG.cubeCount; x++) {
   for (let y = 0; y < CONFIG.cubeCount; y++) {
     for (let z = 0; z < CONFIG.cubeCount; z++) {
-
       if (x > 1 && x < 3 && y > 1 && y < 3 && z > 1 && z < 3) continue;
 
       const mesh = new THREE.Mesh(cubeGeo, baseMaterial);
@@ -109,14 +116,17 @@ for (let x = 0; x < CONFIG.cubeCount; x++) {
 }
 
 /* ---------------- LOGO ---------------- */
+/* Responsive logo size (desktop vs mobile) */
+const logoSize = window.innerWidth < 768 ? 3 : 4;
+
 const logo = new THREE.Mesh(
-  new THREE.PlaneGeometry(4, 4),
+  new THREE.PlaneGeometry(logoSize, logoSize),
   new THREE.MeshBasicMaterial({
     map: logoTexture,
     transparent: true,
     opacity: 0,
     depthTest: false,
-    toneMapped: false // IMPORTANT: prevents white flash
+    toneMapped: false
   })
 );
 scene.add(logo);
@@ -146,6 +156,8 @@ function updateScrollMetrics() {
   scroll.total = document.documentElement.scrollHeight - window.innerHeight || 1;
 }
 updateScrollMetrics();
+
+window.addEventListener('load', updateScrollMetrics);
 
 window.addEventListener('scroll', () => {
   cachedScrollY = window.scrollY;
@@ -207,26 +219,24 @@ function tick() {
   cubeGroup.rotation.y = time * 0.15;
   cubeGroup.rotation.x = Math.sin(time * 0.3) * 0.1;
 
-  /* -------- LOGO FIRST, THEN GLOW -------- */
-// Absolute scroll-based logo reveal (deployment safe)
-let logoReveal = cachedScrollY / LOGO_SCROLL_RANGE;
-logoReveal = Math.max(0, Math.min(logoReveal, 1));
-
-// Ease-in to prevent brightness jump
-logoReveal = logoReveal * logoReveal;
+  /* -------- LOGO (FIXED + MOBILE SAFE) -------- */
+  let logoReveal = cachedScrollY / LOGO_SCROLL_RANGE;
+  logoReveal = Math.max(0, Math.min(logoReveal, 1));
+  logoReveal = logoReveal * logoReveal; // ease-in
 
   logo.material.opacity = logoReveal * fadeOut;
 
   let bloomFactor = 0;
-  if (logoReveal > 0.4) {
-    bloomFactor = (logoReveal - 0.4) / 0.6;
+  if (logoReveal > 0.75) {
+    bloomFactor = (logoReveal - 0.75) / 0.25;
     bloomFactor = Math.min(bloomFactor, 1);
   }
 
   coreLight.intensity = bloomFactor * 10 * fadeOut;
 
+  /* Center logo nicely on mobile */
   logo.position.z = p * 6;
-  logo.position.y = footerOffset;
+  logo.position.y = footerOffset + (window.innerWidth < 768 ? 0.5 : 0);
   logo.lookAt(camera.position);
 
   camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
