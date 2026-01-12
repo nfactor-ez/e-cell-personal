@@ -208,7 +208,13 @@ function tick() {
   cubeGroup.rotation.x = Math.sin(time * 0.3) * 0.1;
 
   /* -------- LOGO FIRST, THEN GLOW -------- */
-  const logoReveal = Math.min(p * 0.5, 1);
+// Absolute scroll-based logo reveal (deployment safe)
+let logoReveal = cachedScrollY / LOGO_SCROLL_RANGE;
+logoReveal = Math.max(0, Math.min(logoReveal, 1));
+
+// Ease-in to prevent brightness jump
+logoReveal = logoReveal * logoReveal;
+
   logo.material.opacity = logoReveal * fadeOut;
 
   let bloomFactor = 0;
