@@ -1,0 +1,379 @@
+:root {
+  /* --- COLORS --- */
+  --c-bg: #050106;
+  --c-pink: #D50B7E; /* MES Pink */
+  --c-neon-pink: #ff00ff3a; /* Hotter Pink for Glow */
+  --c-cyan: #ffcdeaef;
+  --c-glass: rgba(20, 20, 20, 0.8);
+  
+  /* --- FONTS --- */
+  --font-head: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+}
+
+/* --- 1. GLOBAL RESET --- */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--c-bg);
+  color: #fff;
+  font-family: var(--font-body);
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* --- 2. 3D BACKGROUND --- */
+#webgl {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* --- 3. NAVIGATION (FIXED LAYOUT) --- */
+nav {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  padding: 1.5rem 3rem;
+  box-sizing: border-box; /* Critical for layout */
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+}
+
+.nav-logo {
+  height: 80px; /* Forces logo to be correct size */
+  width: auto;
+  filter: drop-shadow(0 0 5px var(--c-pink));
+  transition: filter 0.3s;
+}
+
+.nav-logo:hover {
+  filter: drop-shadow(0 0 15px var(--c-neon-pink));
+}
+
+.btn {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--c-pink);
+  color: #fff;
+  padding: 12px 35px;
+  font-family: var(--font-head);
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+  backdrop-filter: blur(5px);
+  
+  /* Pink Glow */
+  box-shadow: 0 0 10px rgba(213, 11, 126, 0.2);
+}
+
+.btn:hover {
+  background: var(--c-pink);
+  box-shadow: 0 0 20px var(--c-neon-pink), 0 0 40px var(--c-pink);
+  border-color: #fff;
+  text-shadow: 0 0 5px #fff;
+}
+
+/* --- 4. HERO SECTION (NEON TEXT) --- */
+.hero {
+  height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+h1 {
+  font-family: var(--font-head);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1.1;
+  margin: 0;
+  color: #fff;
+  
+  /* THE PINK GLOW EFFECT */
+  text-shadow: 
+    0 0 10px rgba(255,255,255,0.8),
+    0 0 20px var(--c-pink),
+    0 0 40px var(--c-neon-pink),
+    0 0 80px var(--c-neon-pink);
+}
+
+/* --- IMPROVED SUBTITLE (HUD STYLE) --- */
+.tagline {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+
+  padding: 12px 28px;
+  margin: 0 auto;
+
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.4),
+    rgba(0,0,0,0.1)
+  );
+
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+
+  position: relative;
+}
+
+/* subtle neon underline */
+.tagline::after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  bottom: 6px;
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    #00f0ff,
+    #ff00ff
+  );
+  opacity: 0.7;
+}
+
+/* Pushes content down so 3D animation plays first */
+.scroll-spacer {
+  height: 120vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(to bottom, transparent, #000 15%);
+}
+
+/* --- 6. HEADERS & TITLES --- */
+.section-title {
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: 3rem;
+  margin: 4rem 0 3rem 0;
+  text-transform: uppercase;
+  color: #fff;
+  
+  /* PINK GLOW */
+  text-shadow: 
+    0 0 10px var(--c-pink),
+    0 0 30px var(--c-neon-pink);
+}
+
+/* --- 7. SPEAKERS GRID --- */
+.speakers-section {
+  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.speakers-grid {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
+  padding: 0 20px;
+}
+
+.speaker-card {
+  width: 280px;
+  background: var(--c-glass);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.speaker-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--c-pink);
+  /* Pink Card Glow */
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 10px rgba(255, 0, 255, 0.1);
+}
+
+.speaker-img {
+  width: 100%; height: 300px; object-fit: cover;
+  filter: grayscale(1); transition: 0.3s;
+}
+
+.speaker-card:hover .speaker-img { filter: grayscale(0) contrast(1.1); }
+
+.speaker-info { padding: 20px; text-align: center; }
+.speaker-info h3 { 
+  margin: 0; font-family: var(--font-head); font-size: 1.2rem;
+  color: #fff;
+}
+.speaker-info p { margin: 8px 0 0; color: #bbb; font-size: 0.9rem; letter-spacing: 1px; }
+
+
+/* --- 8. IMPACT TICKER (THIS WAS MISSING) --- */
+.impact-section {
+  padding: 4rem 0;
+  margin-top: 4rem; /* Separation */
+  background: rgba(0,0,0,0.3);
+  overflow: hidden; /* Hides the scrollbar */
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  width: max-content;
+  animation: scrollLeft 20s linear infinite;
+  padding: 2rem 0; /* Space for hover effect */
+}
+
+/* Pause animation on hover */
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 180px;
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(5px);
+  
+  /* HEXAGON SHAPE */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s;
+}
+
+/* Hexagon Border Effect */
+.stat-item::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--c-pink);
+  z-index: -1;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  transform: scale(1.03); 
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.stat-item:hover {
+  transform: scale(1.1);
+}
+
+.stat-item:hover::before {
+  opacity: 1;
+  background: var(--c-neon-pink);
+  box-shadow: 0 0 20px var(--c-neon-pink);
+}
+
+.stat-item::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px; right: 2px; bottom: 2px;
+  background: var(--c-bg); /* Inner dark color */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index: -1;
+}
+
+.stat-number {
+  font-family: var(--font-head);
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 0 0 10px var(--c-cyan);
+}
+
+.stat-label {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: #ccc;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* THE MOVING ANIMATION */
+@keyframes scrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } 
+}
+
+
+/* --- 9. PARTNERS --- */
+.partners-section {
+  padding: 4rem 0; margin-top: 5rem;
+  background: rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.logo-grid {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 4rem;
+  max-width: 1000px; margin: 0 auto; padding: 0 20px;
+  align-items: center;
+}
+
+.partner-logo {
+  height: 50px; opacity: 0.5;
+  filter: grayscale(1) brightness(); /* White silhouette */
+  transition: 1s;
+}
+
+.partner-logo:hover {
+  opacity: 1; filter: none; transform: scale(1.1);
+  filter: drop-shadow(0 0 10px var(--c-cyan));
+}
+
+/* --- 10. FOOTER --- */
+footer {
+  background: #000;
+  border-top: 3px solid var(--c-pink);
+  padding: 5rem 2rem 2rem;
+  position: relative;
+  z-index: 20;
+  box-shadow: 0 -20px 50px rgba(213, 11, 126, 0.15); /* Top Glow */
+}
+
+.footer-content {
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  max-width: 1200px; margin: 0 auto; gap: 3rem;
+}
+
+.footer-brand h2 { 
+  font-family: var(--font-head); font-size: 2.5rem; margin: 0 0 15px;
+  color: #fff;
+}
+.footer-brand p { color: #888; max-width: 300px; margin: 0; line-height: 1.6; }
+
+.footer-links h3 { 
+  color: var(--c-pink); font-family: var(--font-head); 
+  margin-bottom: 1.5rem; font-size: 1.1rem; letter-spacing: 1px;
+}
+
+.footer-links a {
+  display: block; color: #999; text-decoration: none;
+  margin-bottom: 12px; transition: 0.3s; font-size: 1.1rem;
+}
+
+.footer-links a:hover { 
+  color: var(--c-cyan); padding-left: 8px; 
+  text-shadow: 0 0 8px var(--c-cyan);
+}
+
+.copyright {
+  text-align: center; margin-top: 5rem; padding-top: 2rem;
+  border-top: 1px solid #111; color: #444; font-size: 0.8rem; letter-spacing: 1px;
+}
