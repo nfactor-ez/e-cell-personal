@@ -235,7 +235,12 @@ function tick() {
   coreLight.intensity = bloomFactor * 10 * fadeOut;
 
   /* Center logo nicely on mobile */
-  logo.position.z = p * 6;
+  // Always keep logo in front of cubes
+logo.position.z = 2;
+
+// Vertically centered (mobile-safe)
+logo.position.y = footerOffset + (window.innerWidth < 768 ? 0.8 : 0);
+
   logo.position.y = footerOffset + (window.innerWidth < 768 ? 0.5 : 0);
   logo.lookAt(camera.position);
 
