@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import logoUrl from './logo.png';
 
 /* ---------------- CONFIG ---------------- */
 const CONFIG = {
@@ -61,7 +62,7 @@ composer.addPass(bloomPass);
 
 /* ---------------- ASSETS ---------------- */
 const texLoader = new THREE.TextureLoader();
-const logoTexture = texLoader.load('/logo.png');
+const logoTexture = texLoader.load(logoUrl);
 
 /* ---------------- GEOMETRY ---------------- */
 const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
@@ -236,27 +237,23 @@ if (logoReveal > 0.7) {
 coreLight.intensity = bloomFactor * 10 * fadeOut;
 
 /* 🔑 PERFECT CENTERING LOGIC */
+/* -------- LOGO POSITIONING -------- */
 const isMobile = window.innerWidth < 768;
 
-// Always in front of cubes
-logo.position.z = 4;
+// 1. Set Z to be safe (between camera and cubes)
+// Camera is at z=10, Cubes are near z=0. z=4 is a safe middle ground.
+logo.position.z = 4; 
 
-// Lock logo to center of screen
+// 2. Center X
 logo.position.x = 0;
-logo.position.y = footerOffset + (isMobile ? 0.6 : 0);
 
-// Always face camera
+// 3. Handle Y offset (scroll + mobile adjustment)
+// We add footerOffset to move it up/down with scroll
+// We add a slight fixed value to center it visually
+logo.position.y = footerOffset + (isMobile ? 0.5 : 0);
+
+// 4. Face camera
 logo.lookAt(camera.position);
-
-  /* Center logo nicely on mobile */
-  // Always keep logo in front of cubes
-logo.position.z = 2;
-
-// Vertically centered (mobile-safe)
-logo.position.y = footerOffset + (window.innerWidth < 768 ? 0.8 : 0);
-
-  logo.position.y = footerOffset + (window.innerWidth < 768 ? 0.5 : 0);
-  logo.lookAt(camera.position);
 
   camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
   camera.position.y += (2 - mouseY * 5 - camera.position.y) * 0.05;
