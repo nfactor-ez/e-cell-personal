@@ -35,14 +35,14 @@ nav {
   position: fixed;
   top: 0; left: 0; width: 100%;
   padding: 1.5rem 3rem;
-  box-sizing: border-box; /* Critical for layout */
+  box-sizing: border-box; 
   display: flex; justify-content: space-between; align-items: center;
   z-index: 1000;
   background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
 }
 
 .nav-logo {
-  height: 80px; /* Forces logo to be correct size */
+  height: 80px; 
   width: auto;
   filter: drop-shadow(0 0 5px var(--c-pink));
   transition: filter 0.3s;
@@ -63,8 +63,6 @@ nav {
   cursor: pointer;
   transition: 0.3s;
   backdrop-filter: blur(5px);
-  
-  /* Pink Glow */
   box-shadow: 0 0 10px rgba(213, 11, 126, 0.2);
 }
 
@@ -77,19 +75,29 @@ nav {
 
 /* --- 4. HERO SECTION (NEON TEXT) --- */
 .hero {
-  height: 100vh;
+  height: 100vh; /* Fixed typo (was 100gvh) */
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
   text-align: center;
   pointer-events: none;
+  padding: 0 15px; /* Added padding to prevent edge touching on mobile */
 }
 
 h1 {
   font-family: var(--font-head);
-  font-size: clamp(3rem, 6vw, 6rem);
+  
+  /* --- FIX 1: TITLE SIZING --- */
+  /* Min: 1.8rem (Mobile) | Max: 6rem (Laptop - preserved original size) */
+  font-size: clamp(1.8rem, 7vw, 6rem);
+  
   line-height: 1.1;
   margin: 0;
   color: #fff;
+  
+  /* Safety for Mobile: Ensure word breaks if screen is too narrow */
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word; 
   
   /* THE PINK GLOW EFFECT */
   text-shadow: 
@@ -102,24 +110,35 @@ h1 {
 /* --- IMPROVED SUBTITLE (HUD STYLE) --- */
 .tagline {
   font-family: 'Inter', 'Poppins', sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.35em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.85);
-
-  padding: 12px 28px;
-  margin: 0 auto;
-
-  background: linear-gradient(
-    to right,
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.1)
-  );
-
+  
+  /* Background & Border (Common) */
+  background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.1));
   border-radius: 6px;
   backdrop-filter: blur(6px);
-
   position: relative;
+  margin: 10px auto 0; /* Slight top margin */
+  
+  /* --- FIX 2: MOBILE FIRST SETTINGS --- */
+  font-size: 10px;        /* Small font for mobile */
+  letter-spacing: 1px;    /* Tight spacing for mobile */
+  padding: 8px 12px;      /* Reduced padding */
+  width: fit-content;     /* Wrap tightly around text */
+  max-width: 90%;         /* Never exceed 90% screen width */
+  line-height: 1.5;       /* Better readability if it wraps */
+}
+
+/* --- FIX 3: LAPTOP RESTORATION (Min-width 768px) --- */
+/* This ensures it looks EXACTLY like before on big screens */
+@media (min-width: 768px) {
+  .tagline {
+    font-size: 14px;          /* Original size */
+    letter-spacing: 0.35em;   /* Original wide spacing */
+    padding: 12px 28px;       /* Original padding */
+    max-width: none;          /* Remove width constraint */
+    margin: 0 auto;           /* Reset margin */
+  }
 }
 
 /* subtle neon underline */
@@ -130,11 +149,7 @@ h1 {
   bottom: 6px;
   width: 70%;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    #00f0ff,
-    #ff00ff
-  );
+  background: linear-gradient(90deg, #00f0ff, #ff00ff);
   opacity: 0.7;
 }
 
@@ -159,11 +174,7 @@ h1 {
   margin: 4rem 0 3rem 0;
   text-transform: uppercase;
   color: #fff;
-  
-  /* PINK GLOW */
-  text-shadow: 
-    0 0 10px var(--c-pink),
-    0 0 30px var(--c-neon-pink);
+  text-shadow: 0 0 10px var(--c-pink), 0 0 30px var(--c-neon-pink);
 }
 
 /* --- 7. SPEAKERS GRID --- */
@@ -190,7 +201,6 @@ h1 {
 .speaker-card:hover {
   transform: translateY(-10px);
   border-color: var(--c-pink);
-  /* Pink Card Glow */
   box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 10px rgba(255, 0, 255, 0.1);
 }
 
@@ -208,13 +218,12 @@ h1 {
 }
 .speaker-info p { margin: 8px 0 0; color: #bbb; font-size: 0.9rem; letter-spacing: 1px; }
 
-
-/* --- 8. IMPACT TICKER (THIS WAS MISSING) --- */
+/* --- 8. IMPACT TICKER --- */
 .impact-section {
   padding: 4rem 0;
-  margin-top: 4rem; /* Separation */
+  margin-top: 4rem;
   background: rgba(0,0,0,0.3);
-  overflow: hidden; /* Hides the scrollbar */
+  overflow: hidden;
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
@@ -231,33 +240,22 @@ h1 {
   gap: 4rem;
   width: max-content;
   animation: scrollLeft 20s linear infinite;
-  padding: 2rem 0; /* Space for hover effect */
+  padding: 2rem 0;
 }
 
-/* Pause animation on hover */
 .marquee-container:hover .marquee-track {
   animation-play-state: paused;
 }
 
 .stat-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  height: 180px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  width: 200px; height: 180px;
   background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(5px);
-  
-  /* HEXAGON SHAPE */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s;
+  position: relative; z-index: 1; transition: transform 0.3s;
 }
 
-/* Hexagon Border Effect */
 .stat-item::before {
   content: "";
   position: absolute;
@@ -266,17 +264,12 @@ h1 {
   z-index: -1;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   transform: scale(1.03); 
-  opacity: 0.5;
-  transition: 0.3s;
+  opacity: 0.5; transition: 0.3s;
 }
 
-.stat-item:hover {
-  transform: scale(1.1);
-}
-
+.stat-item:hover { transform: scale(1.1); }
 .stat-item:hover::before {
-  opacity: 1;
-  background: var(--c-neon-pink);
+  opacity: 1; background: var(--c-neon-pink);
   box-shadow: 0 0 20px var(--c-neon-pink);
 }
 
@@ -284,33 +277,25 @@ h1 {
   content: "";
   position: absolute;
   top: 2px; left: 2px; right: 2px; bottom: 2px;
-  background: var(--c-bg); /* Inner dark color */
+  background: var(--c-bg);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   z-index: -1;
 }
 
 .stat-number {
-  font-family: var(--font-head);
-  font-size: 2.5rem;
-  color: #fff;
+  font-family: var(--font-head); font-size: 2.5rem; color: #fff;
   text-shadow: 0 0 10px var(--c-cyan);
 }
 
 .stat-label {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: #ccc;
-  margin-top: 5px;
-  letter-spacing: 2px;
-  font-weight: bold;
+  font-family: var(--font-body); font-size: 1rem; color: #ccc;
+  margin-top: 5px; letter-spacing: 2px; font-weight: bold;
 }
 
-/* THE MOVING ANIMATION */
 @keyframes scrollLeft {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); } 
 }
-
 
 /* --- 9. PARTNERS --- */
 .partners-section {
@@ -322,14 +307,11 @@ h1 {
 
 .logo-grid {
   display: flex; justify-content: center; flex-wrap: wrap; gap: 4rem;
-  max-width: 1000px; margin: 0 auto; padding: 0 20px;
-  align-items: center;
+  max-width: 1000px; margin: 0 auto; padding: 0 20px; align-items: center;
 }
 
 .partner-logo {
-  height: 50px; opacity: 0.5;
-  filter: grayscale(1) brightness(); /* White silhouette */
-  transition: 1s;
+  height: 50px; opacity: 0.5; filter: grayscale(1); transition: 1s;
 }
 
 .partner-logo:hover {
@@ -342,9 +324,8 @@ footer {
   background: #000;
   border-top: 3px solid var(--c-pink);
   padding: 5rem 2rem 2rem;
-  position: relative;
-  z-index: 20;
-  box-shadow: 0 -20px 50px rgba(213, 11, 126, 0.15); /* Top Glow */
+  position: relative; z-index: 20;
+  box-shadow: 0 -20px 50px rgba(213, 11, 126, 0.15);
 }
 
 .footer-content {
@@ -353,8 +334,7 @@ footer {
 }
 
 .footer-brand h2 { 
-  font-family: var(--font-head); font-size: 2.5rem; margin: 0 0 15px;
-  color: #fff;
+  font-family: var(--font-head); font-size: 2.5rem; margin: 0 0 15px; color: #fff;
 }
 .footer-brand p { color: #888; max-width: 300px; margin: 0; line-height: 1.6; }
 
@@ -369,8 +349,7 @@ footer {
 }
 
 .footer-links a:hover { 
-  color: var(--c-cyan); padding-left: 8px; 
-  text-shadow: 0 0 8px var(--c-cyan);
+  color: var(--c-cyan); padding-left: 8px; text-shadow: 0 0 8px var(--c-cyan);
 }
 
 .copyright {
