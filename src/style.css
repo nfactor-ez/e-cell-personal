@@ -1,8 +1,8 @@
 :root {
   /* --- COLORS --- */
   --c-bg: #050106;
-  --c-pink: #D50B7E; /* MES Pink */
-  --c-neon-pink: #ff00ff3a; /* Hotter Pink for Glow */
+  --c-pink: #D50B7E;
+  --c-neon-pink: #ff00ff3a;
   --c-cyan: #ffcdeaef;
   --c-glass: rgba(20, 20, 20, 0.8);
   
@@ -18,7 +18,7 @@ body {
   background-color: var(--c-bg);
   color: #fff;
   font-family: var(--font-body);
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 /* --- 2. 3D BACKGROUND --- */
@@ -30,33 +30,30 @@ body {
   pointer-events: none;
 }
 
-/* --- 3. NAVIGATION (FIXED LAYOUT) --- */
+/* --- 3. NAVIGATION --- */
 nav {
   position: fixed;
   top: 0; left: 0; width: 100%;
-  padding: 1.5rem 3rem;
-  box-sizing: border-box; 
+  padding: 1.5rem 3rem; /* Desktop Padding */
+  box-sizing: border-box;
   display: flex; justify-content: space-between; align-items: center;
   z-index: 1000;
   background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+  transition: 0.3s;
 }
 
 .nav-logo {
-  height: 80px; 
+  height: 80px; /* Desktop Logo Size */
   width: auto;
   filter: drop-shadow(0 0 5px var(--c-pink));
-  transition: filter 0.3s;
-}
-
-.nav-logo:hover {
-  filter: drop-shadow(0 0 15px var(--c-neon-pink));
+  transition: 0.3s;
 }
 
 .btn {
   background: rgba(0,0,0,0.5);
   border: 1px solid var(--c-pink);
   color: #fff;
-  padding: 12px 35px;
+  padding: 12px 35px; /* Desktop Button Size */
   font-family: var(--font-head);
   font-weight: bold;
   letter-spacing: 1px;
@@ -64,6 +61,7 @@ nav {
   transition: 0.3s;
   backdrop-filter: blur(5px);
   box-shadow: 0 0 10px rgba(213, 11, 126, 0.2);
+  white-space: nowrap; /* Prevents button text wrapping */
 }
 
 .btn:hover {
@@ -73,33 +71,26 @@ nav {
   text-shadow: 0 0 5px #fff;
 }
 
-/* --- 4. HERO SECTION (NEON TEXT) --- */
+/* --- 4. HERO SECTION --- */
 .hero {
-  height: 100vh; /* Fixed typo (was 100gvh) */
+  height: 100vh;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
   text-align: center;
   pointer-events: none;
-  padding: 0 15px; /* Added padding to prevent edge touching on mobile */
+  padding: 0 10px;
 }
 
 h1 {
   font-family: var(--font-head);
-  
-  /* --- FIX 1: TITLE SIZING --- */
-  /* Min: 1.8rem (Mobile) | Max: 6rem (Laptop - preserved original size) */
-  font-size: clamp(1.8rem, 7vw, 6rem);
-  
+  /* Desktop Base Size */
+  font-size: 5rem; 
   line-height: 1.1;
   margin: 0;
   color: #fff;
-  
-  /* Safety for Mobile: Ensure word breaks if screen is too narrow */
   width: 100%;
-  overflow-wrap: break-word;
-  word-wrap: break-word; 
   
-  /* THE PINK GLOW EFFECT */
+  /* Pink Glow */
   text-shadow: 
     0 0 10px rgba(255,255,255,0.8),
     0 0 20px var(--c-pink),
@@ -107,252 +98,150 @@ h1 {
     0 0 80px var(--c-neon-pink);
 }
 
-/* --- IMPROVED SUBTITLE (HUD STYLE) --- */
+/* --- SUBTITLE (TAGLINE) --- */
 .tagline {
   font-family: 'Inter', 'Poppins', sans-serif;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.85);
-  
-  /* Background & Border (Common) */
   background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.1));
   border-radius: 6px;
   backdrop-filter: blur(6px);
   position: relative;
-  margin: 10px auto 0; /* Slight top margin */
   
-  /* --- FIX 2: MOBILE FIRST SETTINGS --- */
-  font-size: 10px;        /* Small font for mobile */
-  letter-spacing: 1px;    /* Tight spacing for mobile */
-  padding: 8px 12px;      /* Reduced padding */
-  width: fit-content;     /* Wrap tightly around text */
-  max-width: 90%;         /* Never exceed 90% screen width */
-  line-height: 1.5;       /* Better readability if it wraps */
+  /* Desktop Default */
+  font-size: 14px;
+  letter-spacing: 0.35em;
+  padding: 12px 28px;
+  margin: 15px auto 0;
+  width: fit-content;
 }
 
-/* --- FIX 3: LAPTOP RESTORATION (Min-width 768px) --- */
-/* This ensures it looks EXACTLY like before on big screens */
-@media (min-width: 768px) {
-  .tagline {
-    font-size: 14px;          /* Original size */
-    letter-spacing: 0.35em;   /* Original wide spacing */
-    padding: 12px 28px;       /* Original padding */
-    max-width: none;          /* Remove width constraint */
-    margin: 0 auto;           /* Reset margin */
-  }
-}
-
-/* subtle neon underline */
 .tagline::after {
   content: "";
   position: absolute;
-  left: 15%;
-  bottom: 6px;
-  width: 70%;
-  height: 2px;
+  left: 15%; bottom: 6px; width: 70%; height: 2px;
   background: linear-gradient(90deg, #00f0ff, #ff00ff);
   opacity: 0.7;
 }
 
-/* Pushes content down so 3D animation plays first */
-.scroll-spacer {
-  height: 120vh;
-  width: 100%;
-  pointer-events: none;
-}
-
-.content-layer {
-  position: relative;
-  z-index: 10;
-  background: linear-gradient(to bottom, transparent, #000 15%);
-}
+/* --- SPACERS & LAYERS --- */
+.scroll-spacer { height: 120vh; width: 100%; pointer-events: none; }
+.content-layer { position: relative; z-index: 10; background: linear-gradient(to bottom, transparent, #000 15%); }
 
 /* --- 6. HEADERS & TITLES --- */
 .section-title {
-  text-align: center;
-  font-family: var(--font-head);
-  font-size: 3rem;
-  margin: 4rem 0 3rem 0;
-  text-transform: uppercase;
-  color: #fff;
+  text-align: center; font-family: var(--font-head); font-size: 3rem;
+  margin: 4rem 0 3rem 0; text-transform: uppercase; color: #fff;
   text-shadow: 0 0 10px var(--c-pink), 0 0 30px var(--c-neon-pink);
 }
 
-/* --- 7. SPEAKERS GRID --- */
-.speakers-section {
-  padding: 2rem 0;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.speakers-grid {
-  display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
-  padding: 0 20px;
-}
-
+/* --- 7. SPEAKERS --- */
+.speakers-section { padding: 2rem 0; max-width: 1200px; margin: 0 auto; }
+.speakers-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; padding: 0 20px; }
 .speaker-card {
-  width: 280px;
-  background: var(--c-glass);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px;
-  overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
+  width: 280px; background: var(--c-glass);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+  overflow: hidden; transition: 0.3s;
 }
-
-.speaker-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--c-pink);
-  box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 10px rgba(255, 0, 255, 0.1);
-}
-
-.speaker-img {
-  width: 100%; height: 300px; object-fit: cover;
-  filter: grayscale(1); transition: 0.3s;
-}
-
+.speaker-card:hover { transform: translateY(-10px); border-color: var(--c-pink); box-shadow: 0 0 30px rgba(255,0,255,0.3); }
+.speaker-img { width: 100%; height: 300px; object-fit: cover; filter: grayscale(1); transition: 0.3s; }
 .speaker-card:hover .speaker-img { filter: grayscale(0) contrast(1.1); }
-
 .speaker-info { padding: 20px; text-align: center; }
-.speaker-info h3 { 
-  margin: 0; font-family: var(--font-head); font-size: 1.2rem;
-  color: #fff;
-}
+.speaker-info h3 { margin: 0; font-family: var(--font-head); font-size: 1.2rem; color: #fff; }
 .speaker-info p { margin: 8px 0 0; color: #bbb; font-size: 0.9rem; letter-spacing: 1px; }
 
 /* --- 8. IMPACT TICKER --- */
 .impact-section {
-  padding: 4rem 0;
-  margin-top: 4rem;
-  background: rgba(0,0,0,0.3);
-  overflow: hidden;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 4rem 0; margin-top: 4rem; background: rgba(0,0,0,0.3);
+  overflow: hidden; border-y: 1px solid rgba(255,255,255,0.05);
 }
-
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-}
-
-.marquee-track {
-  display: flex;
-  gap: 4rem;
-  width: max-content;
-  animation: scrollLeft 20s linear infinite;
-  padding: 2rem 0;
-}
-
-.marquee-container:hover .marquee-track {
-  animation-play-state: paused;
-}
-
+.marquee-container { width: 100%; overflow: hidden; white-space: nowrap; }
+.marquee-track { display: flex; gap: 4rem; width: max-content; animation: scrollLeft 20s linear infinite; padding: 2rem 0; }
+.marquee-container:hover .marquee-track { animation-play-state: paused; }
 .stat-item {
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  width: 200px; height: 180px;
-  background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(5px);
+  width: 200px; height: 180px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(5px);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  position: relative; z-index: 1; transition: transform 0.3s;
+  position: relative; z-index: 1; transition: 0.3s;
 }
-
 .stat-item::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--c-pink);
-  z-index: -1;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  transform: scale(1.03); 
-  opacity: 0.5; transition: 0.3s;
+  content: ""; position: absolute; inset: 0; background: var(--c-pink);
+  z-index: -1; clip-path: inherit; transform: scale(1.03); opacity: 0.5; transition: 0.3s;
 }
-
 .stat-item:hover { transform: scale(1.1); }
-.stat-item:hover::before {
-  opacity: 1; background: var(--c-neon-pink);
-  box-shadow: 0 0 20px var(--c-neon-pink);
-}
-
+.stat-item:hover::before { opacity: 1; background: var(--c-neon-pink); box-shadow: 0 0 20px var(--c-neon-pink); }
 .stat-item::after {
-  content: "";
-  position: absolute;
-  top: 2px; left: 2px; right: 2px; bottom: 2px;
-  background: var(--c-bg);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  z-index: -1;
+  content: ""; position: absolute; inset: 2px; background: var(--c-bg);
+  clip-path: inherit; z-index: -1;
 }
-
-.stat-number {
-  font-family: var(--font-head); font-size: 2.5rem; color: #fff;
-  text-shadow: 0 0 10px var(--c-cyan);
-}
-
-.stat-label {
-  font-family: var(--font-body); font-size: 1rem; color: #ccc;
-  margin-top: 5px; letter-spacing: 2px; font-weight: bold;
-}
-
-@keyframes scrollLeft {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } 
-}
+.stat-number { font-family: var(--font-head); font-size: 2.5rem; color: #fff; text-shadow: 0 0 10px var(--c-cyan); }
+.stat-label { font-family: var(--font-body); font-size: 1rem; color: #ccc; margin-top: 5px; letter-spacing: 2px; font-weight: bold; }
+@keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 /* --- 9. PARTNERS --- */
-.partners-section {
-  padding: 4rem 0; margin-top: 5rem;
-  background: rgba(0,0,0,0.5);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.logo-grid {
-  display: flex; justify-content: center; flex-wrap: wrap; gap: 4rem;
-  max-width: 1000px; margin: 0 auto; padding: 0 20px; align-items: center;
-}
-
-.partner-logo {
-  height: 50px; opacity: 0.5; filter: grayscale(1); transition: 1s;
-}
-
-.partner-logo:hover {
-  opacity: 1; filter: none; transform: scale(1.1);
-  filter: drop-shadow(0 0 10px var(--c-cyan));
-}
+.partners-section { padding: 4rem 0; margin-top: 5rem; background: rgba(0,0,0,0.5); border-y: 1px solid rgba(255,255,255,0.05); }
+.logo-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 4rem; max-width: 1000px; margin: 0 auto; padding: 0 20px; align-items: center; }
+.partner-logo { height: 50px; opacity: 0.5; filter: grayscale(1); transition: 1s; }
+.partner-logo:hover { opacity: 1; filter: none; transform: scale(1.1); filter: drop-shadow(0 0 10px var(--c-cyan)); }
 
 /* --- 10. FOOTER --- */
-footer {
-  background: #000;
-  border-top: 3px solid var(--c-pink);
-  padding: 5rem 2rem 2rem;
-  position: relative; z-index: 20;
-  box-shadow: 0 -20px 50px rgba(213, 11, 126, 0.15);
-}
-
-.footer-content {
-  display: flex; flex-wrap: wrap; justify-content: space-between;
-  max-width: 1200px; margin: 0 auto; gap: 3rem;
-}
-
-.footer-brand h2 { 
-  font-family: var(--font-head); font-size: 2.5rem; margin: 0 0 15px; color: #fff;
-}
+footer { background: #000; border-top: 3px solid var(--c-pink); padding: 5rem 2rem 2rem; position: relative; z-index: 20; box-shadow: 0 -20px 50px rgba(213, 11, 126, 0.15); }
+.footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; margin: 0 auto; gap: 3rem; }
+.footer-brand h2 { font-family: var(--font-head); font-size: 2.5rem; margin: 0 0 15px; color: #fff; }
 .footer-brand p { color: #888; max-width: 300px; margin: 0; line-height: 1.6; }
+.footer-links h3 { color: var(--c-pink); font-family: var(--font-head); margin-bottom: 1.5rem; font-size: 1.1rem; letter-spacing: 1px; }
+.footer-links a { display: block; color: #999; text-decoration: none; margin-bottom: 12px; transition: 0.3s; font-size: 1.1rem; }
+.footer-links a:hover { color: var(--c-cyan); padding-left: 8px; text-shadow: 0 0 8px var(--c-cyan); }
+.copyright { text-align: center; margin-top: 5rem; padding-top: 2rem; border-top: 1px solid #111; color: #444; font-size: 0.8rem; letter-spacing: 1px; }
 
-.footer-links h3 { 
-  color: var(--c-pink); font-family: var(--font-head); 
-  margin-bottom: 1.5rem; font-size: 1.1rem; letter-spacing: 1px;
-}
+/* ================================================= */
+/* MOBILE OPTIMIZATION (THE FIX)         */
+/* ================================================= */
 
-.footer-links a {
-  display: block; color: #999; text-decoration: none;
-  margin-bottom: 12px; transition: 0.3s; font-size: 1.1rem;
-}
+@media (max-width: 768px) {
+  
+  /* 1. NAVBAR FIXES */
+  nav {
+    padding: 1rem 1.2rem; /* Reduce padding significantly */
+  }
+  
+  .nav-logo {
+    height: 45px; /* Shrink Logo to fit phone */
+  }
+  
+  .btn {
+    padding: 8px 16px; /* Shrink Button padding */
+    font-size: 0.85rem; /* Shrink Button text */
+    letter-spacing: 0.5px;
+  }
 
-.footer-links a:hover { 
-  color: var(--c-cyan); padding-left: 8px; text-shadow: 0 0 8px var(--c-cyan);
-}
+  /* 2. MAIN TITLE FIX (Prevents "IP" from breaking) */
+  h1 {
+    /* 8vw means font is always 8% of screen width. 
+       This guarantees it fits on one line. */
+    font-size: 8vw; 
+    line-height: 1.2;
+  }
 
-.copyright {
-  text-align: center; margin-top: 5rem; padding-top: 2rem;
-  border-top: 1px solid #111; color: #444; font-size: 0.8rem; letter-spacing: 1px;
+  /* 3. TAGLINE FIX */
+  .tagline {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 8px 10px;
+    width: 90%; /* Constrain width */
+    max-width: 300px;
+    margin-top: 10px;
+    line-height: 1.4;
+    white-space: normal; /* Allow nice wrapping */
+  }
+
+  .tagline::after {
+    left: 5%; width: 90%; /* Adjust underline */
+  }
+
+  /* 4. SECTION TITLE FIX */
+  .section-title {
+    font-size: 2rem; /* Smaller section headers */
+    margin: 3rem 0 2rem 0;
+  }
 }
