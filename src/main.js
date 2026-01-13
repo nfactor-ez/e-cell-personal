@@ -220,19 +220,33 @@ function tick() {
   cubeGroup.rotation.x = Math.sin(time * 0.3) * 0.1;
 
   /* -------- LOGO (FIXED + MOBILE SAFE) -------- */
-  let logoReveal = cachedScrollY / LOGO_SCROLL_RANGE;
-  logoReveal = Math.max(0, Math.min(logoReveal, 1));
-  logoReveal = logoReveal * logoReveal; // ease-in
+/* -------- LOGO (CENTERED + MOBILE SAFE) -------- */
+let logoReveal = cachedScrollY / LOGO_SCROLL_RANGE;
+logoReveal = Math.max(0, Math.min(logoReveal, 1));
+logoReveal = logoReveal * logoReveal; // ease-in
 
-  logo.material.opacity = logoReveal * fadeOut;
+logo.material.opacity = logoReveal * fadeOut;
 
-  let bloomFactor = 0;
-  if (logoReveal > 0.75) {
-    bloomFactor = (logoReveal - 0.75) / 0.25;
-    bloomFactor = Math.min(bloomFactor, 1);
-  }
+/* Bloom trigger */
+let bloomFactor = 0;
+if (logoReveal > 0.7) {
+  bloomFactor = (logoReveal - 0.7) / 0.3;
+  bloomFactor = Math.min(bloomFactor, 1);
+}
+coreLight.intensity = bloomFactor * 10 * fadeOut;
 
-  coreLight.intensity = bloomFactor * 10 * fadeOut;
+/* 🔑 PERFECT CENTERING LOGIC */
+const isMobile = window.innerWidth < 768;
+
+// Always in front of cubes
+logo.position.z = 4;
+
+// Lock logo to center of screen
+logo.position.x = 0;
+logo.position.y = footerOffset + (isMobile ? 0.6 : 0);
+
+// Always face camera
+logo.lookAt(camera.position);
 
   /* Center logo nicely on mobile */
   // Always keep logo in front of cubes
